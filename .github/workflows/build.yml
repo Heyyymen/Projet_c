@@ -1,0 +1,42 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - main  # Exécute l'analyse pour la branche principale
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Récupérer le code source
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Étape 2 : Installer SonarCloud scanner
+      - name: Set up SonarCloud
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.organization=heyyymen
+            -Dsonar.projectKey=Heyyymen_Projet_c
+            -Dsonar.sources=.
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.cfamily.build-wrapper-output=bw-output
+            -Dsonar.cfamily.compile-commands=compile_commands.json
+
+      # Étape 3 : Compiler le projet avec le build-wrapper
+      - name: Build with build-wrapper
+        run: |
+          build-wrapper-linux-x86-64 --out-dir bw-output <commande_de_build>
+
+      # Étape 4 : Exécuter l'analyse avec SonarCloud
+      - name: Run SonarCloud analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner
