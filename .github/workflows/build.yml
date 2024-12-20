@@ -31,6 +31,12 @@ jobs:
           Expand-Archive build-wrapper-win-x86.zip -DestinationPath "C:\build-wrapper"
         shell: pwsh
 
+      # Étape 3.1 : Vérification de l'existence des fichiers build-wrapper
+      - name: Verify build-wrapper files
+        run: |
+          dir C:\build-wrapper
+        shell: pwsh
+
       # Étape 4 : Construction du projet (exemple pour un projet C/C++)
       - name: Build the project
         run: |
