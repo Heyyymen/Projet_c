@@ -27,14 +27,14 @@ jobs:
       # Étape 3 : Téléchargement de build-wrapper pour Windows
       - name: Download build-wrapper
         run: |
-          Invoke-WebRequest -Uri "https://github.com/SonarSource/sonarcloud-scan/releases/download/v2.1.0/build-wrapper-win-x86.zip" -OutFile "build-wrapper-win-x86.zip"
+          Invoke-WebRequest -Uri "https://sonarcloud.io/static/cpp/build-wrapper-win-x86.zip" -OutFile "build-wrapper-win-x86.zip"
           Expand-Archive build-wrapper-win-x86.zip -DestinationPath "C:\build-wrapper"
         shell: pwsh
 
       # Étape 4 : Construction du projet (exemple pour un projet C/C++)
       - name: Build the project
         run: |
-          C:\build-wrapper\build-wrapper-win-x86.exe --out-dir bw-output cmake --build .  # Adapte en fonction de ton projet
+          C:\build-wrapper\build-wrapper-win-x86-64.exe --out-dir bw-output cmake --build .  # Adapte en fonction de ton projet
         shell: pwsh
 
       # Étape 5 : Exécution de l'analyse SonarCloud
@@ -49,4 +49,4 @@ jobs:
             -Dsonar.cfamily.build-wrapper-output=bw-output
             -Dsonar.cfamily.compile-commands=compile_commands.json
         env:
-          SONAR_TOKEN: aa9c45d07e72b4e2a4efbe93ddd1e429d7205926  # Utilisation directe du token dans l'environnement pour l'exercice
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Utilisation sécurisée du token à partir des secrets GitHub
