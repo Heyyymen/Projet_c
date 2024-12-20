@@ -40,7 +40,7 @@ jobs:
       # Étape 4 : Construction du projet (exemple pour un projet C/C++)
       - name: Build the project
         run: |
-          C:\build-wrapper\build-wrapper-win-x86-64.exe --out-dir bw-output cmake --build .  # Adapte en fonction de ton projet
+          C:\build-wrapper\build-wrapper-win-x86\build-wrapper-win-x86-64.exe --out-dir bw-output cmake --build .  # Adapte en fonction de ton projet
         shell: pwsh
 
       # Étape 5 : Exécution de l'analyse SonarCloud
