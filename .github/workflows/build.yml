@@ -1,4 +1,5 @@
 name: SonarQube
+
 on:
   push:
     branches:
@@ -9,27 +10,21 @@ on:
 jobs:
   build:
     name: Build and analyze
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
-      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory  # Répertoire pour la sortie de build-wrapper
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Désactive les clones superficiels pour une analyse plus pertinente
-
+          fetch-depth: 0  # Shallow clones should be disabled for better analysis relevance
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v3
-
-      # Commande de build spécifique à ton projet (remplace cette ligne par ta commande de build)
       - name: Run build-wrapper
         run: |
-          # Remplace <votre_commande_de_build_propre> par ta commande réelle (par exemple, `make` ou `cmake`)
-          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make
-
+          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} <insert_your_clean_build_command>
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          # Assure-toi que le fichier compile_commands.json est généré et passé à sonar-scanner
           sonar-scanner --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
